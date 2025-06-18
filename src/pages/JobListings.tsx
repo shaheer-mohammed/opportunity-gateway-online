@@ -6,254 +6,253 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Link } from 'react-router-dom';
-import { Search, MapPin, Building, Clock, Bookmark, Filter } from 'lucide-react';
+import { Search, MapPin, Briefcase, Clock, DollarSign, Filter } from 'lucide-react';
 
 const JobListings = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
-  const [salaryFilter, setSalaryFilter] = useState('');
+  const [jobTypeFilter, setJobTypeFilter] = useState('');
+  const [experienceFilter, setExperienceFilter] = useState('');
 
-  // Mock job data - replace with real API calls
-  const allJobs = [
+  // Mock data - replace with real API call
+  const jobs = [
     {
       id: 1,
       title: 'Senior Frontend Developer',
       company: 'TechCorp Inc.',
       location: 'San Francisco, CA',
       type: 'Full-time',
-      salary: '$120k - $160k',
-      description: 'Join our team as a Senior Frontend Developer and work on cutting-edge web applications using React, TypeScript, and modern tooling.',
-      requirements: ['5+ years React experience', 'TypeScript', 'Team leadership'],
-      postedDays: 2,
-      isRemote: false,
-      isBookmarked: false
+      experience: 'Senior',
+      salary: '$120,000 - $150,000',
+      description: 'We are looking for a Senior Frontend Developer to join our dynamic team...',
+      postedDate: '2024-01-15',
+      tags: ['React', 'TypeScript', 'JavaScript']
     },
     {
       id: 2,
-      title: 'React Developer (Remote)',
+      title: 'Product Manager',
       company: 'StartupXYZ',
-      location: 'Remote',
+      location: 'New York, NY',
       type: 'Full-time',
-      salary: '$80k - $120k',
-      description: 'Work remotely with our distributed team to build amazing user experiences with React and Node.js.',
-      requirements: ['3+ years React', 'Node.js', 'Remote work experience'],
-      postedDays: 1,
-      isRemote: true,
-      isBookmarked: true
+      experience: 'Mid-level',
+      salary: '$100,000 - $130,000',
+      description: 'Join our product team to drive innovation and growth...',
+      postedDate: '2024-01-12',
+      tags: ['Product Strategy', 'Analytics', 'Leadership']
     },
     {
       id: 3,
-      title: 'Full Stack Developer',
-      company: 'BigTech Co.',
-      location: 'New York, NY',
-      type: 'Full-time',
-      salary: '$100k - $140k',
-      description: 'Build scalable web applications using modern JavaScript frameworks and cloud technologies.',
-      requirements: ['Full-stack experience', 'AWS', 'Database design'],
-      postedDays: 3,
-      isRemote: false,
-      isBookmarked: false
+      title: 'UX Designer',
+      company: 'DesignStudio',
+      location: 'Remote',
+      type: 'Contract',
+      experience: 'Mid-level',
+      salary: '$80,000 - $110,000',
+      description: 'Create amazing user experiences for our digital products...',
+      postedDate: '2024-01-10',
+      tags: ['Figma', 'User Research', 'Prototyping']
     },
     {
       id: 4,
-      title: 'Frontend Engineer - Intern',
-      company: 'InnovateTech',
-      location: 'Seattle, WA',
-      type: 'Internship',
-      salary: '$25/hour',
-      description: 'Perfect opportunity for students to gain hands-on experience in frontend development.',
-      requirements: ['JavaScript', 'HTML/CSS', 'Basic React knowledge'],
-      postedDays: 1,
-      isRemote: false,
-      isBookmarked: false
+      title: 'Backend Developer',
+      company: 'DataCorp',
+      location: 'Austin, TX',
+      type: 'Full-time',
+      experience: 'Junior',
+      salary: '$70,000 - $90,000',
+      description: 'Build scalable backend systems and APIs...',
+      postedDate: '2024-01-08',
+      tags: ['Node.js', 'Python', 'Database']
     },
     {
       id: 5,
-      title: 'Senior Backend Developer',
-      company: 'DataFlow Systems',
-      location: 'Austin, TX',
+      title: 'DevOps Engineer',
+      company: 'CloudTech',
+      location: 'Seattle, WA',
       type: 'Full-time',
-      salary: '$130k - $170k',
-      description: 'Lead backend development for high-traffic applications using Python, PostgreSQL, and microservices.',
-      requirements: ['Python', 'PostgreSQL', 'Microservices architecture'],
-      postedDays: 4,
-      isRemote: false,
-      isBookmarked: false
+      experience: 'Senior',
+      salary: '$110,000 - $140,000',
+      description: 'Manage cloud infrastructure and deployment pipelines...',
+      postedDate: '2024-01-06',
+      tags: ['AWS', 'Docker', 'Kubernetes']
     },
     {
       id: 6,
-      title: 'UI/UX Developer',
-      company: 'DesignFirst Agency',
+      title: 'Mobile Developer',
+      company: 'AppStudio',
       location: 'Los Angeles, CA',
-      type: 'Contract',
-      salary: '$60k - $90k',
-      description: 'Create beautiful and functional user interfaces while collaborating closely with design teams.',
-      requirements: ['UI/UX design', 'Figma', 'CSS frameworks'],
-      postedDays: 2,
-      isRemote: false,
-      isBookmarked: false
+      type: 'Part-time',
+      experience: 'Mid-level',
+      salary: '$60,000 - $80,000',
+      description: 'Develop cross-platform mobile applications...',
+      postedDate: '2024-01-04',
+      tags: ['React Native', 'iOS', 'Android']
     }
   ];
 
-  const [jobs, setJobs] = useState(allJobs);
-
-  const toggleBookmark = (jobId: number) => {
-    setJobs(jobs.map(job => 
-      job.id === jobId ? { ...job, isBookmarked: !job.isBookmarked } : job
-    ));
-  };
-
+  // Filter jobs based on search criteria
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.company.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesLocation = !locationFilter || job.location.includes(locationFilter);
-    const matchesType = !typeFilter || job.type === typeFilter;
-    const matchesSalary = !salaryFilter || job.salary.includes(salaryFilter);
+                         job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         job.description.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesSearch && matchesLocation && matchesType && matchesSalary;
+    const matchesLocation = !locationFilter || job.location.toLowerCase().includes(locationFilter.toLowerCase());
+    const matchesJobType = !jobTypeFilter || job.type === jobTypeFilter;
+    const matchesExperience = !experienceFilter || job.experience === experienceFilter;
+
+    return matchesSearch && matchesLocation && matchesJobType && matchesExperience;
   });
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Browse Jobs</h1>
-          <p className="text-gray-600 mt-2">Discover your next career opportunity</p>
-        </div>
-        <div className="flex items-center space-x-2 text-sm text-gray-600">
-          <span>{filteredJobs.length} jobs found</span>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Job Listings</h1>
+        <p className="text-gray-600 mt-2">Discover your next career opportunity</p>
       </div>
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            <div className="lg:col-span-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search jobs, companies..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Filter className="h-5 w-5" />
+            <span>Search & Filter Jobs</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search jobs, companies, or keywords..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Location</label>
+              <Input
+                placeholder="Enter location..."
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+              />
             </div>
-            
-            <Select value={locationFilter} onValueChange={setLocationFilter}>
-              <SelectTrigger>
-                <MapPin className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All Locations</SelectItem>
-                <SelectItem value="Remote">Remote</SelectItem>
-                <SelectItem value="San Francisco">San Francisco, CA</SelectItem>
-                <SelectItem value="New York">New York, NY</SelectItem>
-                <SelectItem value="Seattle">Seattle, WA</SelectItem>
-                <SelectItem value="Austin">Austin, TX</SelectItem>
-              </SelectContent>
-            </Select>
 
-            <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger>
-                <Building className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Job Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
-                <SelectItem value="Full-time">Full-time</SelectItem>
-                <SelectItem value="Part-time">Part-time</SelectItem>
-                <SelectItem value="Contract">Contract</SelectItem>
-                <SelectItem value="Internship">Internship</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Job Type</label>
+              <Select value={jobTypeFilter} onValueChange={setJobTypeFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select job type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="Full-time">Full-time</SelectItem>
+                  <SelectItem value="Part-time">Part-time</SelectItem>
+                  <SelectItem value="Contract">Contract</SelectItem>
+                  <SelectItem value="Freelance">Freelance</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-            <Select value={salaryFilter} onValueChange={setSalaryFilter}>
-              <SelectTrigger>
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Salary Range" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All Salaries</SelectItem>
-                <SelectItem value="$50k">$50k+</SelectItem>
-                <SelectItem value="$80k">$80k+</SelectItem>
-                <SelectItem value="$100k">$100k+</SelectItem>
-                <SelectItem value="$120k">$120k+</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Experience</label>
+              <Select value={experienceFilter} onValueChange={setExperienceFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select experience" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Levels</SelectItem>
+                  <SelectItem value="Junior">Junior</SelectItem>
+                  <SelectItem value="Mid-level">Mid-level</SelectItem>
+                  <SelectItem value="Senior">Senior</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-end">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchTerm('');
+                  setLocationFilter('');
+                  setJobTypeFilter('');
+                  setExperienceFilter('');
+                }}
+                className="w-full"
+              >
+                Clear Filters
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Job Listings */}
-      <div className="grid gap-6">
+      {/* Results Summary */}
+      <div className="flex items-center justify-between">
+        <p className="text-gray-600">
+          {filteredJobs.length} job{filteredJobs.length !== 1 ? 's' : ''} found
+        </p>
+      </div>
+
+      {/* Job Cards */}
+      <div className="space-y-4">
         {filteredJobs.map((job) => (
-          <Card key={job.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+          <Card key={job.id} className="hover:shadow-md transition-shadow cursor-pointer">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <Link to={`/jobs/${job.id}`} className="hover:text-blue-600">
-                      <h3 className="text-xl font-semibold text-gray-900">{job.title}</h3>
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <Link to={`/jobs/${job.id}`}>
+                      <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                        {job.title}
+                      </h3>
                     </Link>
-                    {job.isRemote && (
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
-                        Remote
-                      </Badge>
-                    )}
+                    <p className="text-gray-600 font-medium">{job.company}</p>
                   </div>
-                  
-                  <div className="flex items-center space-x-4 text-gray-600 mb-3">
-                    <div className="flex items-center space-x-1">
-                      <Building className="h-4 w-4" />
-                      <span>{job.company}</span>
-                    </div>
+
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center space-x-1">
                       <MapPin className="h-4 w-4" />
                       <span>{job.location}</span>
                     </div>
                     <div className="flex items-center space-x-1">
+                      <Briefcase className="h-4 w-4" />
+                      <span>{job.type}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
                       <Clock className="h-4 w-4" />
-                      <span>{job.postedDays} days ago</span>
+                      <span>{new Date(job.postedDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <DollarSign className="h-4 w-4" />
+                      <span>{job.salary}</span>
                     </div>
                   </div>
 
-                  <p className="text-gray-700 mb-4 line-clamp-2">{job.description}</p>
+                  <p className="text-gray-700 line-clamp-2">{job.description}</p>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <Badge variant="outline">{job.type}</Badge>
-                      <span className="text-blue-600 font-semibold">{job.salary}</span>
-                    </div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleBookmark(job.id)}
-                        className={job.isBookmarked ? 'text-blue-600' : 'text-gray-400'}
-                      >
-                        <Bookmark className={`h-4 w-4 ${job.isBookmarked ? 'fill-current' : ''}`} />
-                      </Button>
-                      <Link to={`/jobs/${job.id}`}>
-                        <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
-                          View Details
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {job.requirements.slice(0, 3).map((req, index) => (
+                  <div className="flex flex-wrap gap-2">
+                    {job.tags.map((tag, index) => (
                       <Badge key={index} variant="secondary" className="text-xs">
-                        {req}
+                        {tag}
                       </Badge>
                     ))}
                   </div>
+                </div>
+
+                <div className="ml-6 flex flex-col space-y-2">
+                  <Badge variant={job.experience === 'Senior' ? 'default' : 'outline'}>
+                    {job.experience}
+                  </Badge>
+                  <Link to={`/jobs/${job.id}`}>
+                    <Button size="sm" className="w-full">
+                      View Details
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
@@ -264,9 +263,28 @@ const JobListings = () => {
       {filteredJobs.length === 0 && (
         <Card>
           <CardContent className="p-12 text-center">
-            <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No jobs found</h3>
-            <p className="text-gray-600">Try adjusting your search criteria or filters</p>
+            <div className="space-y-4">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                <Search className="h-8 w-8 text-gray-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">No jobs found</h3>
+                <p className="text-gray-500 mt-1">
+                  Try adjusting your search criteria or filters to find more results.
+                </p>
+              </div>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchTerm('');
+                  setLocationFilter('');
+                  setJobTypeFilter('');
+                  setExperienceFilter('');
+                }}
+              >
+                Clear All Filters
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
