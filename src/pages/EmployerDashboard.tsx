@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { Briefcase, Users, FileText, Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import ApplicationNotifications from '@/components/ApplicationNotifications';
 
 const EmployerDashboard = () => {
   // Mock data - replace with real API calls
@@ -101,6 +101,9 @@ const EmployerDashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Application Notifications - New Section */}
+      <ApplicationNotifications />
 
       {/* Recent Job Postings */}
       <Card>
