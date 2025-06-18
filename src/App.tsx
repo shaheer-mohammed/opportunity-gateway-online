@@ -1,25 +1,101 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import Landing from "./pages/Landing";
+import EmployerDashboard from "./pages/EmployerDashboard";
+import SeekerDashboard from "./pages/SeekerDashboard";
+import JobListings from "./pages/JobListings";
+import MyApplications from "./pages/MyApplications";
+import JobDetails from "./pages/JobDetails";
+import PostJob from "./pages/PostJob";
+import Layout from "./components/Layout";
 
 const queryClient = new QueryClient();
+
+const ProtectedRoute = ({ children, requiredRole }: { children: React.ReactNode, requiredRole?: string }) => {
+  const { user, isAuthenticated } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+  
+  if (requiredRole && user?.role !== requiredRole) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+const AppRoutes = () => {
+  const { user, isAuthenticated } = useAuth();
+  
+  return (
+    <Routes>
+      <Route path="/" element={
+        isAuthenticated ? (
+          user?.role === 'employer' ? 
+            <Navigate to="/employer/dashboard" replace /> : 
+            <Navigate to="/seeker/dashboard" replace />
+        ) : (
+          <Landing />
+        )
+      } />
+      
+      <Route path="/employer/dashboard" element={
+        <ProtectedRoute requiredRole="employer">
+          <Layout><EmployerDashboard /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/employer/post-job" element={
+        <ProtectedRoute requiredRole="employer">
+          <Layout><PostJob /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/seeker/dashboard" element={
+        <ProtectedRoute requiredRole="seeker">
+          <Layout><SeekerDashboard /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/jobs" element={
+        <ProtectedRoute>
+          <Layout><JobListings /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/jobs/:id" element={
+        <ProtectedRoute>
+          <Layout><JobDetails /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/my-applications" element={
+        <ProtectedRoute requiredRole="seeker">
+          <Layout><MyApplications /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="*" element={<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100" />} />
+    </Routes>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
