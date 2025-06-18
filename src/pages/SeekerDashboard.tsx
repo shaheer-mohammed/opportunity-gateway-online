@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { Briefcase, FileSearch, Clock, CheckCircle, XCircle, ArrowRight } from 'lucide-react';
+import { Briefcase, FileSearch, Clock, CheckCircle, XCircle, ArrowRight, AlertTriangle, Timer } from 'lucide-react';
 
 const SeekerDashboard = () => {
   // Mock data - replace with real API calls
@@ -12,6 +11,7 @@ const SeekerDashboard = () => {
     appliedJobs: 15,
     interviews: 3,
     pending: 8,
+    rejected: 4,
   };
 
   const recentApplications = [
@@ -44,26 +44,8 @@ const SeekerDashboard = () => {
     }
   ];
 
-  const recommendedJobs = [
-    {
-      id: 4,
-      title: 'Senior React Developer',
-      company: 'InnovateTech',
-      location: 'Seattle, WA',
-      salary: '$100k - $140k',
-      type: 'Full-time',
-      postedDays: 2
-    },
-    {
-      id: 5,
-      title: 'JavaScript Developer',
-      company: 'WebSolutions',
-      location: 'Remote',
-      salary: '$75k - $110k',
-      type: 'Full-time',
-      postedDays: 1
-    }
-  ];
+  const pendingApplications = recentApplications.filter(app => app.status === 'pending');
+  const rejectedApplications = recentApplications.filter(app => app.status === 'rejected');
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -91,6 +73,27 @@ const SeekerDashboard = () => {
     }
   };
 
+  const recommendedJobs = [
+    {
+      id: 4,
+      title: 'Senior React Developer',
+      company: 'InnovateTech',
+      location: 'Seattle, WA',
+      salary: '$100k - $140k',
+      type: 'Full-time',
+      postedDays: 2
+    },
+    {
+      id: 5,
+      title: 'JavaScript Developer',
+      company: 'WebSolutions',
+      location: 'Remote',
+      salary: '$75k - $110k',
+      type: 'Full-time',
+      postedDays: 1
+    }
+  ];
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -108,7 +111,7 @@ const SeekerDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -145,9 +148,96 @@ const SeekerDashboard = () => {
                 <p className="text-3xl font-bold text-yellow-900">{stats.pending}</p>
               </div>
               <div className="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center">
-                <Clock className="h-6 w-6 text-white" />
+                <Timer className="h-6 w-6 text-white" />
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-600 text-sm font-medium">Rejected</p>
+                <p className="text-3xl font-bold text-red-900">{stats.rejected}</p>
+              </div>
+              <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
+                <XCircle className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Status Highlights Section */}
+      <div className="grid lg:grid-cols-2 gap-8">
+        {/* Pending Applications */}
+        <Card className="border-yellow-200">
+          <CardHeader className="bg-yellow-50">
+            <div className="flex items-center space-x-2">
+              <Timer className="h-5 w-5 text-yellow-600" />
+              <CardTitle className="text-yellow-800">Pending Applications</CardTitle>
+            </div>
+            <CardDescription>Applications awaiting response</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            {pendingApplications.length > 0 ? (
+              <div className="space-y-4">
+                {pendingApplications.map((app) => (
+                  <div key={app.id} className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-semibold text-gray-900">{app.jobTitle}</h3>
+                          <Badge className="bg-yellow-100 text-yellow-800 border-yellow-300">
+                            {app.status}
+                          </Badge>
+                        </div>
+                        <p className="text-gray-600 text-sm mt-1">{app.company} • {app.location}</p>
+                        <p className="text-gray-500 text-xs mt-1">Applied on {new Date(app.appliedDate).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center py-4">No pending applications</p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Rejected Applications */}
+        <Card className="border-red-200">
+          <CardHeader className="bg-red-50">
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="h-5 w-5 text-red-600" />
+              <CardTitle className="text-red-800">Recent Rejections</CardTitle>
+            </div>
+            <CardDescription>Applications that were not successful</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            {rejectedApplications.length > 0 ? (
+              <div className="space-y-4">
+                {rejectedApplications.map((app) => (
+                  <div key={app.id} className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-semibold text-gray-900">{app.jobTitle}</h3>
+                          <Badge className="bg-red-100 text-red-800 border-red-300">
+                            {app.status}
+                          </Badge>
+                        </div>
+                        <p className="text-gray-600 text-sm mt-1">{app.company} • {app.location}</p>
+                        <p className="text-gray-500 text-xs mt-1">Applied on {new Date(app.appliedDate).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center py-4">No rejected applications</p>
+            )}
           </CardContent>
         </Card>
       </div>
