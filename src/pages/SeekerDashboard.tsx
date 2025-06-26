@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { Briefcase, FileSearch, Clock, CheckCircle, XCircle, ArrowRight, AlertTriangle, Timer, Star } from 'lucide-react';
+import { Briefcase, FileSearch, Clock, CheckCircle, XCircle, ArrowRight, AlertTriangle, Timer, Search } from 'lucide-react';
 
 const SeekerDashboard = () => {
   // Mock data - replace with real API calls
@@ -12,7 +12,7 @@ const SeekerDashboard = () => {
     interviews: 3,
     pending: 8,
     rejected: 4,
-    reviews: 12,
+    reviewing: 5,
   };
 
   const recentApplications = [
@@ -173,11 +173,11 @@ const SeekerDashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-600 text-sm font-medium">Reviews</p>
-                <p className="text-3xl font-bold text-purple-900">{stats.reviews}</p>
+                <p className="text-purple-600 text-sm font-medium">Reviewing</p>
+                <p className="text-3xl font-bold text-purple-900">{stats.reviewing}</p>
               </div>
               <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                <Star className="h-6 w-6 text-white" />
+                <Search className="h-6 w-6 text-white" />
               </div>
             </div>
           </CardContent>
