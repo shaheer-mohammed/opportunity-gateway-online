@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { Briefcase, FileSearch, Clock, CheckCircle, XCircle, ArrowRight, AlertTriangle, Timer } from 'lucide-react';
+import { Briefcase, FileSearch, Clock, CheckCircle, XCircle, ArrowRight, AlertTriangle, Timer, Star } from 'lucide-react';
 
 const SeekerDashboard = () => {
   // Mock data - replace with real API calls
@@ -12,6 +12,7 @@ const SeekerDashboard = () => {
     interviews: 3,
     pending: 8,
     rejected: 4,
+    reviews: 12,
   };
 
   const recentApplications = [
@@ -111,7 +112,7 @@ const SeekerDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -163,6 +164,20 @@ const SeekerDashboard = () => {
               </div>
               <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
                 <XCircle className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-600 text-sm font-medium">Reviews</p>
+                <p className="text-3xl font-bold text-purple-900">{stats.reviews}</p>
+              </div>
+              <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                <Star className="h-6 w-6 text-white" />
               </div>
             </div>
           </CardContent>
