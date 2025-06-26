@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, Building, MapPin, Eye, Trash2, Clock, CheckCircle, XCircle, FileText } from 'lucide-react';
+import { Calendar, Building, MapPin, Eye, Trash2, Clock, CheckCircle, XCircle, FileText, Search } from 'lucide-react';
 
 const MyApplications = () => {
   const navigate = useNavigate();
@@ -212,8 +212,11 @@ const MyApplications = () => {
             <p className="text-sm text-gray-600">Pending</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
           <CardContent className="p-4 text-center">
+            <div className="flex items-center justify-center mb-2">
+              <Search className="h-5 w-5 text-blue-600" />
+            </div>
             <p className="text-2xl font-bold text-blue-600">{stats.reviewing}</p>
             <p className="text-sm text-gray-600">Reviewing</p>
           </CardContent>
