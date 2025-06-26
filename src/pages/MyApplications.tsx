@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Building, MapPin, Eye, Trash2, Clock, CheckCircle, XCircle, FileText } from 'lucide-react';
 
 const MyApplications = () => {
+  const navigate = useNavigate();
   const [applications] = useState([
     {
       id: 1,
@@ -18,7 +19,8 @@ const MyApplications = () => {
       appliedDate: '2024-01-15',
       lastUpdate: '2024-01-18',
       notes: 'Technical interview scheduled for next week',
-      jobType: 'Full-time'
+      jobType: 'Full-time',
+      jobId: 1
     },
     {
       id: 2,
@@ -30,7 +32,8 @@ const MyApplications = () => {
       appliedDate: '2024-01-12',
       lastUpdate: '2024-01-12',
       notes: 'Waiting for initial response',
-      jobType: 'Full-time'
+      jobType: 'Full-time',
+      jobId: 2
     },
     {
       id: 3,
@@ -42,7 +45,8 @@ const MyApplications = () => {
       appliedDate: '2024-01-10',
       lastUpdate: '2024-01-16',
       notes: 'Position filled by internal candidate',
-      jobType: 'Full-time'
+      jobType: 'Full-time',
+      jobId: 3
     },
     {
       id: 4,
@@ -54,7 +58,8 @@ const MyApplications = () => {
       appliedDate: '2024-01-08',
       lastUpdate: '2024-01-14',
       notes: 'Application under review by hiring manager',
-      jobType: 'Full-time'
+      jobType: 'Full-time',
+      jobId: 4
     },
     {
       id: 5,
@@ -66,7 +71,8 @@ const MyApplications = () => {
       appliedDate: '2024-01-05',
       lastUpdate: '2024-01-05',
       notes: 'Initial application submitted',
-      jobType: 'Contract'
+      jobType: 'Contract',
+      jobId: 5
     }
   ]);
 
@@ -103,6 +109,10 @@ const MyApplications = () => {
   const filterApplicationsByStatus = (status: string) => {
     if (status === 'all') return applications;
     return applications.filter(app => app.status === status);
+  };
+
+  const handleViewJob = (jobId: number) => {
+    navigate(`/jobs/${jobId}`);
   };
 
   const ApplicationCard = ({ application }: { application: any }) => (
@@ -158,7 +168,7 @@ const MyApplications = () => {
 
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => handleViewJob(application.jobId)}>
               <Eye className="h-4 w-4 mr-2" />
               View Job
             </Button>
