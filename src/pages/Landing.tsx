@@ -22,13 +22,15 @@ const Landing = () => {
     const formData = new FormData(e.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-    const username = formData.get('username') as string;
+    const firstName = formData.get('firstName') as string;
+    const lastName = formData.get('lastName') as string;
 
     try {
       if (authMode === 'login') {
-        await login(email, password, userRole);
+        await login(email, password, 'seeker'); // Default to seeker for login
         toast.success('Welcome back!');
       } else {
+        const username = `${firstName} ${lastName}`;
         await register(username, email, password, userRole);
         toast.success('Account created successfully!');
       }
@@ -118,28 +120,6 @@ const Landing = () => {
                 </CardHeader>
 
                 <CardContent className="space-y-6">
-                  {/* Role Selection */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button
-                      type="button"
-                      variant={userRole === 'seeker' ? 'default' : 'outline'}
-                      onClick={() => setUserRole('seeker')}
-                      className="py-6"
-                    >
-                      <Users className="h-4 w-4 mr-2" />
-                      Job Seeker
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={userRole === 'employer' ? 'default' : 'outline'}
-                      onClick={() => setUserRole('employer')}
-                      className="py-6"
-                    >
-                      <Briefcase className="h-4 w-4 mr-2" />
-                      Employer
-                    </Button>
-                  </div>
-
                   <Tabs value={authMode} onValueChange={(value) => setAuthMode(value as 'login' | 'register')}>
                     <TabsList className="grid w-full grid-cols-2">
                       <TabsTrigger value="login">Sign In</TabsTrigger>
@@ -178,16 +158,50 @@ const Landing = () => {
                     </TabsContent>
 
                     <TabsContent value="register" className="space-y-4 mt-6">
+                      {/* Role Selection for Sign Up */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <Button
+                          type="button"
+                          variant={userRole === 'seeker' ? 'default' : 'outline'}
+                          onClick={() => setUserRole('seeker')}
+                          className="py-6"
+                        >
+                          <Users className="h-4 w-4 mr-2" />
+                          Job Seeker
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={userRole === 'employer' ? 'default' : 'outline'}
+                          onClick={() => setUserRole('employer')}
+                          className="py-6"
+                        >
+                          <Briefcase className="h-4 w-4 mr-2" />
+                          Employer
+                        </Button>
+                      </div>
+
                       <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="username">Username</Label>
-                          <Input
-                            id="username"
-                            name="username"
-                            placeholder="Choose a username"
-                            required
-                            className="h-12"
-                          />
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-2">
+                            <Label htmlFor="firstName">First Name</Label>
+                            <Input
+                              id="firstName"
+                              name="firstName"
+                              placeholder="First name"
+                              required
+                              className="h-12"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="lastName">Last Name</Label>
+                            <Input
+                              id="lastName"
+                              name="lastName"
+                              placeholder="Last name"
+                              required
+                              className="h-12"
+                            />
+                          </div>
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="email">Email</Label>
