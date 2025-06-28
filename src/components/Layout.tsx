@@ -2,6 +2,17 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { Briefcase, User, FileText, LogOut, ChevronLeft } from 'lucide-react';
 
@@ -26,6 +37,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ];
 
   const showBackButton = currentPath !== '/employer/dashboard' && currentPath !== '/seeker/dashboard';
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -59,15 +74,35 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span className="text-sm text-gray-600">
                 Welcome, {user?.username}
               </span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={logout}
-                className="hover:bg-red-50 hover:border-red-200 hover:text-red-600"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hover:bg-red-50 hover:border-red-200 hover:text-red-600"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to log out? You'll need to sign in again to access your account.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={handleLogout}
+                      className="bg-red-600 hover:bg-red-700"
+                    >
+                      Logout
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>
