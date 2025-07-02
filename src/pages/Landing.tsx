@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { Briefcase, Users, Search, TrendingUp, CheckCircle, ArrowRight } from 'lucide-react';
+import { Briefcase, Users, Search, TrendingUp, CheckCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Landing = () => {
@@ -14,6 +13,8 @@ const Landing = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [userRole, setUserRole] = useState<'employer' | 'seeker'>('seeker');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -141,14 +142,29 @@ const Landing = () => {
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="password">Password</Label>
-                          <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            required
-                            className="h-12"
-                          />
+                          <div className="relative">
+                            <Input
+                              id="password"
+                              name="password"
+                              type={showLoginPassword ? "text" : "password"}
+                              placeholder="Enter your password"
+                              required
+                              className="h-12 pr-12"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
+                              onClick={() => setShowLoginPassword(!showLoginPassword)}
+                            >
+                              {showLoginPassword ? (
+                                <EyeOff className="h-4 w-4 text-gray-500" />
+                              ) : (
+                                <Eye className="h-4 w-4 text-gray-500" />
+                              )}
+                            </Button>
+                          </div>
                         </div>
                         <Button type="submit" className="w-full h-12 text-base" disabled={isLoading}>
                           {isLoading ? 'Signing In...' : 'Sign In'}
@@ -216,14 +232,29 @@ const Landing = () => {
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="password">Password</Label>
-                          <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            placeholder="Create a password"
-                            required
-                            className="h-12"
-                          />
+                          <div className="relative">
+                            <Input
+                              id="password"
+                              name="password"
+                              type={showRegisterPassword ? "text" : "password"}
+                              placeholder="Create a password"
+                              required
+                              className="h-12 pr-12"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="absolute right-0 top-0 h-12 w-12 hover:bg-transparent"
+                              onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                            >
+                              {showRegisterPassword ? (
+                                <EyeOff className="h-4 w-4 text-gray-500" />
+                              ) : (
+                                <Eye className="h-4 w-4 text-gray-500" />
+                              )}
+                            </Button>
+                          </div>
                         </div>
                         <Button type="submit" className="w-full h-12 text-base" disabled={isLoading}>
                           {isLoading ? 'Creating Account...' : 'Create Account'}
