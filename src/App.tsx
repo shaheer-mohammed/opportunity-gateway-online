@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Landing from "./pages/Landing";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 import EmployerDashboard from "./pages/EmployerDashboard";
 import SeekerDashboard from "./pages/SeekerDashboard";
 import JobListings from "./pages/JobListings";
@@ -42,6 +44,26 @@ const AppRoutes = () => {
             <Navigate to="/seeker/dashboard" replace />
         ) : (
           <Landing />
+        )
+      } />
+      
+      <Route path="/signin" element={
+        isAuthenticated ? (
+          user?.role === 'employer' ? 
+            <Navigate to="/employer/dashboard" replace /> : 
+            <Navigate to="/seeker/dashboard" replace />
+        ) : (
+          <SignIn />
+        )
+      } />
+      
+      <Route path="/signup" element={
+        isAuthenticated ? (
+          user?.role === 'employer' ? 
+            <Navigate to="/employer/dashboard" replace /> : 
+            <Navigate to="/seeker/dashboard" replace />
+        ) : (
+          <SignUp />
         )
       } />
       
