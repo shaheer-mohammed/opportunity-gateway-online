@@ -9,6 +9,9 @@ import Landing from "./pages/Landing";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import EmployerDashboard from "./pages/EmployerDashboard";
+import EmployerJobListings from "./pages/EmployerJobListings";
+import EmployerJobView from "./pages/EmployerJobView";
+import EmployerJobEdit from "./pages/EmployerJobEdit";
 import SeekerDashboard from "./pages/SeekerDashboard";
 import JobListings from "./pages/JobListings";
 import MyApplications from "./pages/MyApplications";
@@ -76,6 +79,24 @@ const AppRoutes = () => {
       <Route path="/employer/post-job" element={
         <ProtectedRoute requiredRole="employer">
           <Layout><PostJob /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/employer/jobs" element={
+        <ProtectedRoute requiredRole="employer">
+          <Layout><EmployerJobListings /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/employer/jobs/:id" element={
+        <ProtectedRoute requiredRole="employer">
+          <Layout><EmployerJobView /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/employer/jobs/:id/edit" element={
+        <ProtectedRoute requiredRole="employer">
+          <Layout><EmployerJobEdit /></Layout>
         </ProtectedRoute>
       } />
       

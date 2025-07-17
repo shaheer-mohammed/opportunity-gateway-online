@@ -108,8 +108,17 @@ const EmployerDashboard = () => {
       {/* Recent Job Postings */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Job Postings</CardTitle>
-          <CardDescription>Manage your latest job listings</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Recent Job Postings</CardTitle>
+              <CardDescription>Manage your latest job listings</CardDescription>
+            </div>
+            <Link to="/employer/jobs">
+              <Button variant="outline" size="sm">
+                View All Jobs
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -133,12 +142,16 @@ const EmployerDashboard = () => {
                   </div>
                   
                   <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="sm">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <Edit className="h-4 w-4" />
-                    </Button>
+                    <Link to={`/employer/jobs/${job.id}`}>
+                      <Button variant="ghost" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <Link to={`/employer/jobs/${job.id}/edit`}>
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </Link>
                     <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
                       <Trash2 className="h-4 w-4" />
                     </Button>
