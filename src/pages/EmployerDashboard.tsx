@@ -107,30 +107,6 @@ const EmployerDashboard = () => {
       {/* Application Notifications - New Section */}
       <ApplicationNotifications />
 
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Manage your applications and job postings</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <Link to="/employer/applications">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                View All Applications
-              </Button>
-            </Link>
-            <Link to="/employer/jobs">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Briefcase className="h-4 w-4" />
-                Manage Job Listings
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Recent Job Postings */}
       <Card>
         <CardHeader>
@@ -168,17 +144,22 @@ const EmployerDashboard = () => {
                   </div>
                   
                   <div className="flex items-center space-x-2">
+                    <Link to={`/employer/applications?jobId=${job.id}`}>
+                      <Button variant="ghost" size="sm" title="View Applications">
+                        <Users className="h-4 w-4" />
+                      </Button>
+                    </Link>
                     <Link to={`/employer/jobs/${job.id}`}>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" title="View Job">
                         <Eye className="h-4 w-4" />
                       </Button>
                     </Link>
                     <Link to={`/employer/jobs/${job.id}/edit`}>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" title="Edit Job">
                         <Edit className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50">
+                    <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 hover:bg-red-50" title="Delete Job">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
