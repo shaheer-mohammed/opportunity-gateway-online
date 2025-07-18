@@ -107,6 +107,30 @@ const EmployerDashboard = () => {
       {/* Application Notifications - New Section */}
       <ApplicationNotifications />
 
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+          <CardDescription>Manage your applications and job postings</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4">
+            <Link to="/employer/applications">
+              <Button variant="outline" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                View All Applications
+              </Button>
+            </Link>
+            <Link to="/employer/jobs">
+              <Button variant="outline" className="flex items-center gap-2">
+                <Briefcase className="h-4 w-4" />
+                Manage Job Listings
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Recent Job Postings */}
       <Card>
         <CardHeader>
