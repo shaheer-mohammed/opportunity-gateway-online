@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { Eye, Edit, Trash2, Plus, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const EmployerJobListings = () => {
+  const [jobToDelete, setJobToDelete] = useState<number | null>(null);
+
   // Mock data - replace with real API calls
   const jobs = [
     {
@@ -68,6 +80,13 @@ const EmployerJobListings = () => {
       case 'draft': return 'outline';
       default: return 'secondary';
     }
+  };
+
+  const handleDeleteJob = (jobId: number) => {
+    // TODO: Replace with actual API call to delete job
+    console.log('Deleting job:', jobId);
+    setJobToDelete(null);
+    // Here you would typically update the jobs state or refetch data
   };
 
   return (
@@ -139,7 +158,12 @@ const EmployerJobListings = () => {
                     </Button>
                   </Link>
                   
-                  <Button variant="outline" size="sm" className="text-destructive hover:text-destructive">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-destructive hover:text-destructive"
+                    onClick={() => setJobToDelete(job.id)}
+                  >
                     <Trash2 className="h-4 w-4 mr-1" />
                     Delete
                   </Button>
@@ -149,6 +173,28 @@ const EmployerJobListings = () => {
           </Card>
         ))}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <AlertDialog open={jobToDelete !== null} onOpenChange={() => setJobToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to delete this job?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the job posting
+              and all associated applications.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => jobToDelete && handleDeleteJob(jobToDelete)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete Job
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
