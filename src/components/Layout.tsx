@@ -13,8 +13,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Briefcase, User, FileText, LogOut, ChevronLeft, Settings } from 'lucide-react';
+import { Briefcase, User, FileText, LogOut, ChevronLeft, Settings, ChevronDown } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,7 +41,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Dashboard', href: '/seeker/dashboard', icon: User },
     { name: 'Browse Jobs', href: '/jobs', icon: Briefcase },
     { name: 'My Applications', href: '/my-applications', icon: FileText },
-    { name: 'Edit Profile', href: '/profile/edit', icon: Settings },
   ];
 
   const showBackButton = currentPath !== '/employer/dashboard' && currentPath !== '/seeker/dashboard';
@@ -72,38 +78,55 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
 
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                Welcome, {user?.username}
-              </span>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="hover:bg-red-50 hover:border-red-200 hover:text-red-600"
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Logout
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2 hover:bg-blue-50">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                      <User className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="text-sm text-gray-700">{user?.username}</span>
+                    <ChevronDown className="h-4 w-4 text-gray-500" />
                   </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to log out? You'll need to sign in again to access your account.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction 
-                      onClick={handleLogout}
-                      className="bg-red-600 hover:bg-red-700"
-                    >
-                      Logout
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {!isEmployer && (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile/edit" className="flex items-center">
+                          <Settings className="mr-2 h-4 w-4" />
+                          Edit Profile
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to log out? You'll need to sign in again to access your account.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction 
+                          onClick={handleLogout}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
+                          Logout
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
