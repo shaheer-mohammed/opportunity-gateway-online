@@ -14,7 +14,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/contexts/AuthContext';
-import { Briefcase, User, FileText, LogOut, ChevronLeft } from 'lucide-react';
+import { Briefcase, User, FileText, LogOut, ChevronLeft, Settings } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,6 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Dashboard', href: '/seeker/dashboard', icon: User },
     { name: 'Browse Jobs', href: '/jobs', icon: Briefcase },
     { name: 'My Applications', href: '/my-applications', icon: FileText },
+    { name: 'Edit Profile', href: '/profile/edit', icon: Settings },
   ];
 
   const showBackButton = currentPath !== '/employer/dashboard' && currentPath !== '/seeker/dashboard';

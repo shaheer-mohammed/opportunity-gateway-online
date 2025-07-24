@@ -18,6 +18,7 @@ import JobListings from "./pages/JobListings";
 import MyApplications from "./pages/MyApplications";
 import JobDetails from "./pages/JobDetails";
 import PostJob from "./pages/PostJob";
+import SeekerProfile from "./pages/SeekerProfile";
 import Layout from "./components/Layout";
 
 const queryClient = new QueryClient();
@@ -128,6 +129,12 @@ const AppRoutes = () => {
       <Route path="/my-applications" element={
         <ProtectedRoute requiredRole="seeker">
           <Layout><MyApplications /></Layout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/profile/edit" element={
+        <ProtectedRoute requiredRole="seeker">
+          <Layout><SeekerProfile /></Layout>
         </ProtectedRoute>
       } />
       
