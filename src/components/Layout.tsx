@@ -92,9 +92,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   {!isEmployer && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link to="/profile/edit" className="flex items-center">
-                          <Settings className="mr-2 h-4 w-4" />
-                          Edit Profile
+                        <Link to="/profile" className="flex items-center">
+                          <User className="mr-2 h-4 w-4" />
+                          View Profile
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
