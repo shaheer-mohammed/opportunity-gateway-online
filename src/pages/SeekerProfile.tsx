@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -42,6 +44,7 @@ const profileSchema = z.object({
     startDate: z.date(),
     endDate: z.date().optional(),
     description: z.string().min(10, 'Description must be at least 10 characters'),
+    experienceLevel: z.enum(['fresher', 'mid_level', 'senior', 'lead']),
   })),
   skills: z.array(z.object({
     name: z.string().min(1, 'Skill name is required'),
@@ -56,6 +59,7 @@ const profileSchema = z.object({
     preferredLocation: z.string().min(2, 'Preferred location is required'),
     employmentType: z.enum(['full-time', 'part-time', 'freelance']),
     expectedSalary: z.number().min(0, 'Expected salary must be positive'),
+    salaryRange: z.string().optional(),
   }),
 });
 
@@ -79,7 +83,7 @@ const SeekerProfile = () => {
         profilePicture: '',
       },
       education: [{ degree: '', university: '', yearOfPassing: new Date().getFullYear(), grade: '' }],
-      workExperience: [{ companyName: '', jobTitle: '', startDate: new Date(), description: '' }],
+      workExperience: [{ companyName: '', jobTitle: '', startDate: new Date(), description: '', experienceLevel: 'fresher' }],
       skills: [{ name: '', proficiency: 'beginner' as const }],
       socialLinks: {
         linkedin: '',
@@ -90,6 +94,7 @@ const SeekerProfile = () => {
         preferredLocation: '',
         employmentType: 'full-time' as const,
         expectedSalary: 0,
+        salaryRange: '',
       },
     },
   });
@@ -452,7 +457,7 @@ const SeekerProfile = () => {
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => appendExperience({ companyName: '', jobTitle: '', startDate: new Date(), description: '' })}
+                    onClick={() => appendExperience({ companyName: '', jobTitle: '', startDate: new Date(), description: '', experienceLevel: 'fresher' })}
                   >
                     <Plus className="h-4 w-4 mr-1" />
                     Add Experience
@@ -544,39 +549,23 @@ const SeekerProfile = () => {
                       />
                       <FormField
                         control={form.control}
-                        name={`workExperience.${index}.endDate`}
+                        name={`workExperience.${index}.experienceLevel`}
                         render={({ field }) => (
                           <FormItem className="flex flex-col">
-                            <FormLabel>End Date (Optional)</FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant="outline"
-                                    className={cn(
-                                      "w-full pl-3 text-left font-normal",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    {field.value ? (
-                                      format(field.value, "PPP")
-                                    ) : (
-                                      <span>Current job</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent className="w-auto p-0" align="start">
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  initialFocus
-                                  className="p-3 pointer-events-auto"
-                                />
-                              </PopoverContent>
-                            </Popover>
+                            <FormLabel>Experience Level</FormLabel>
+                            <Select value={field.value} onValueChange={field.onChange}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select experience level" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="fresher">Entry Level (0-2 years)</SelectItem>
+                                <SelectItem value="mid_level">Mid Level (2-5 years)</SelectItem>
+                                <SelectItem value="senior">Senior Level (5+ years)</SelectItem>
+                                <SelectItem value="lead">Lead/Principal (8+ years)</SelectItem>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -767,12 +756,29 @@ const SeekerProfile = () => {
                     name="jobPreferences.expectedSalary"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Expected Salary ($)</FormLabel>
+                        <FormLabel>Expected Salary</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
+                            placeholder="120000"
                             {...field}
                             onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="jobPreferences.salaryRange"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Salary Range</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g. 80,000 - 120,000"
+                            {...field}
                           />
                         </FormControl>
                         <FormMessage />
